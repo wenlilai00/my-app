@@ -1,0 +1,87 @@
+.container-container {
+    margin-top: 4%;
+}
+
+.container-container h1{
+    margin-left: -80%;
+    margin-bottom: 5%;
+}
+
+.chart-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.display-manager-employee h3 {
+    margin-left: 0%;
+    margin-top: 20%;
+    font-size: 18px;
+}
+
+.display-manager-employee {
+    display: flex;
+    flex-direction: column;
+    line-height: 1%;
+}
+
+.employee-table {
+    padding: 10px;
+    margin-left: 0px;
+    margin-top: 50px;
+    width: 150vh;
+}
+
+.buttons-employee {
+    border: 2px;
+    border-radius: 4px;
+    box-shadow: 0px 4px 8px;
+    background-color: #e8bb67;
+    margin-right: 20px;
+    padding: 7px;
+    width:30vh;
+}
+
+.custom-calendar .p-datepicker-inline {
+    max-height: 300px; /* Adjust the height as needed */
+    overflow-y: auto;  /* Add scrolling if the content overflows */
+
+}
+
+.custom-calendar {
+    transform: scale(1.0); /* Adjust the scale as needed */
+    transform-origin: top left; /* Ensures the calendar scales down from the top-left corner */
+}
+
+.card {
+    margin-top: 30px;
+}
+
+.background {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: inherit !important;
+}
+
+.addEmployee-btn {
+    width: 30vh;
+    margin-left: 78%;
+    margin-top: 30px;
+    background-color: #f3ddb4;
+    color: black;
+    border: none !important;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+.addbtn {
+    background-color: green;
+    margin-left: 58%;
+    margin-right: 18px;
+    border-radius: 5px;
+    border: none;
+    padding-right: 17px !important;
+    padding-left: 14px !important;
+    padding: 7px;
+}
+

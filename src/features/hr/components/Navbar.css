@@ -1,0 +1,40 @@
+a {
+    text-decoration: none;
+    color: black;
+    margin-right: 10px;
+    font-size: 15px;
+}
+
+a > :hover {
+    color:blue;
+}
+
+.nav-box {
+    background-color: #f3ddb4;
+}
+
+.navbar-container {
+    margin-left: 20%;
+    word-spacing: 20%;
+}
+
+.search-btn {
+    margin-left: 5px;
+}
+
+.search-container {
+    padding-top: 3px;
+    margin-left: 30px;
+    border-radius: 8px;
+}
+
+.navbar-brand {
+margin-left: auto;
+}
+
+.logout-btn {
+    color: black;
+    margin-left: 120px;
+    border: none;
+}
+

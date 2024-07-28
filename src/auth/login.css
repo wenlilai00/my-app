@@ -1,0 +1,21 @@
+body {
+    background-color: white;
+  }
+
+.project-title {
+  align-content: left;
+  margin-left: -80%;
+  margin-top: 10px;
+}
+
+.project-title h1 {
+  font-size: 25px !important;
+}
+
+.login-btn {
+  background-color: "orange";
+}
+
+.login-btn:hover {
+  background-color: antiquewhite;
+}
