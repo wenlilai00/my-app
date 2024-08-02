@@ -24,6 +24,7 @@ function Login(){
         .then(response=>{
             console.log(response.data);
             let user = {
+              'userid': response.data.id,
               'token': token,
               'username': username,
               'role': response.data.role
@@ -32,6 +33,9 @@ function Login(){
             localStorage.setItem('token', token)
             localStorage.setItem('username',username)
             localStorage.setItem('role',user.role)
+            localStorage.setItem('userid',user.userid)
+
+          
             
             if(user.role === 'HR'){
               navigate('/hr');
@@ -65,7 +69,7 @@ function Login(){
         <MDBCol col='12'>
 
 
-          <MDBCard className='my-5 mx-auto' style={{borderRadius: '4rem',  backgroundColor: "#f5d190", borderColor: "orange", maxWidth: '500px'}}>
+          <MDBCard className='my-5 mx-auto' style={{borderRadius: '1rem',  backgroundColor: "#5093eb", maxWidth: '500px'}}>
             <MDBCardBody className='p-5 w-100 d-flex flex-column'>
 
 
@@ -85,7 +89,7 @@ function Login(){
               <MDBInput wrapperClass='mb-4 w-100' placeholder="Password"  type='password' size="lg"
               onChange={(e)=>setPassword(e.target.value)}/>
                 
-              <button className='login-btn' onClick={()=>onLogin()}>LOGIN</button> 
+              <button className='login-btn' variant="primary" onClick={()=>onLogin()}>LOGIN</button> 
 
             </MDBCardBody>
           </MDBCard>
@@ -95,25 +99,7 @@ function Login(){
 
     </MDBContainer>
     </>
-      //   <div className="customer-container">
-      //   <div className="customer-form">
-      //     <div className='form-content'>
-      //       <h1>Login</h1>
-      //       <div>{errorMsg}</div>
-      //       <label>Enter username: </label>
-      //       <input type="text" onChange={(e)=>setUsername(e.target.value) }/> 
-            
-      //       <br /><br />
-      //       <label>Enter Password: </label>
-      //       <input type="text" onChange={(e)=>setPassword(e.target.value)}/>
-            
-      //       <br /><br />
 
-      //        <button onClick={()=>onLogin()}>LOGIN</button> 
-             
-      //     </div>
-      //   </div>
-      // </div>
     )
 }
 

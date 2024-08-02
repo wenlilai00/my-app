@@ -14,6 +14,7 @@ function Dashboard() {
 
     const [countEmployee,setCountEmployee] = useState(0);
     const [countManager,setCountManager] = useState(0);
+    const [countHR,setCountHR] = useState(0);
 
     const [chartData, setChartData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
@@ -38,15 +39,15 @@ function Dashboard() {
             labels: ['Employee', 'Manager'],
             datasets: [ 
                 {
-                    data: [countEmployee, countManager],
+                    data: [countEmployee, countManager, countHR],
                     backgroundColor: [
-                        documentStyle.getPropertyValue('--blue-500'), 
-                        // documentStyle.getPropertyValue('--yellow-500'), 
+                        // documentStyle.getPropertyValue('#df8c43'), 
+                        documentStyle.getPropertyValue('--yellow-500'), 
                         documentStyle.getPropertyValue('--green-500')
                     ],
                     hoverBackgroundColor: [
-                        documentStyle.getPropertyValue('--blue-400'), 
-                        // documentStyle.getPropertyValue('--yellow-400'), 
+                        // documentStyle.getPropertyValue('--blue-400'), 
+                        documentStyle.getPropertyValue('--yellow-400'), 
                         documentStyle.getPropertyValue('--green-400')
                     ]
                 }
@@ -112,11 +113,10 @@ function Dashboard() {
 
     return (
         <div>
-            {/* <Navbar /> */}
 
             <div className="dashboard-container">
                 <Container className='container-container'>
-                    <h1>Welcome HR</h1>
+                    <h1>HR Dashboard</h1>
                     <Row>
                         <Col className='row-container' xs={12} sm={7}>
 
@@ -138,9 +138,7 @@ function Dashboard() {
                             </div>
 
                         </div>
-                            {/* <div className="card-body " style={{textAlign : 'center'}}>
-                                <span className="count">{countEmployee} </span>
-                            </div> */}
+                           
                         </Col>
 
                         <Col sm={5}>
@@ -156,47 +154,6 @@ function Dashboard() {
                         </Col>
                     </Row>
                 
-                <Table className='employee-table' striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Username</th>
-                            <th>Phone</th>
-                            <th>City</th>
-                            <th>Salary</th>
-                            <th>Job Title</th>
-                            {/* <th>Actions</th> */}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {employees.map((employee, index) => (
-                            <tr key={employee.id}>
-                                <td>{index + 1}</td>
-                                <td>{employee.name}</td>
-                                <td>{employee.username}</td>
-                                <td>{employee.contact}</td>
-                                <td>{employee.city}</td>
-                                <td>{employee.salary}</td>
-                                <td>{employee.jobTitle}</td>
-                                {/* <td> */}
-                                    {/* <Box sx={{ display: 'flex', gap: '1rem' }}>
-                                        <Tooltip title="Edit">
-                                        <IconButton onClick={() => table.setEditingRow(row)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                        </Tooltip>
-                                        <Tooltip title="Delete">
-                                        <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        </Tooltip>
-                                    </Box> */}
-                                {/* </td> */}
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
                 </Container>
             </div>
         </div>

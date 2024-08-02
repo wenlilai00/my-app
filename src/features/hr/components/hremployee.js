@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -8,11 +8,12 @@ import axios from 'axios';
 import 'primeicons/primeicons.css';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { Toast } from 'primereact/toast';
 
 function HREmployee() {
     const { list } = useSelector((state) => state.employee);
     const [data, setData] = useState([...list]);
-    const [employee, setEmployee] = useState({});
     const [filters, setFilters] = useState({
         name: { value: null, matchMode: 'contains' },
         city: { value: null, matchMode: 'equals' },
@@ -27,7 +28,6 @@ function HREmployee() {
     const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [employeeToDelete, setEmployeeToDelete] = useState(null);
-
     const [name, setName] = useState('');
     const [city, setCity] = useState('');
     const [salary, setSalary] = useState('');
@@ -37,6 +37,12 @@ function HREmployee() {
     const [contact, setContact] = useState('');
     const [password, setPassword] = useState('');
     const [msg, setMsg] = useState('');
+    const [isMessageDialogVisible, setIsMessageDialogVisible] = useState(false);
+    const [messageContent, setMessageContent] = useState('');
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [taskDetails,setTaskDetails] = useState('');
+    const [employee,setEmployee] = useState({});
+    const toast = useRef(null);
 
     useEffect(() => {
         axios.get('http://localhost:8081/api/jobtype', {
@@ -44,17 +50,16 @@ function HREmployee() {
                 'Authorization': 'Basic ' + localStorage.getItem('token')
             }
         })
-        .then(resp => {
-            setJobTitle(resp.data);
-        });
+        .then(resp => setJobTitle(resp.data))
+        .catch(error => console.error('Error fetching job types:', error));
 
         axios.get('http://localhost:8081/api/manager/all', {
             headers: {
                 'Authorization': 'Basic ' + localStorage.getItem('token')
             }
-        }).then(resp => {
-            setManagers(resp.data);
-        });
+        })
+        .then(resp => setManagers(resp.data))
+        .catch(error => console.error('Error fetching managers:', error));
 
         axios.get('http://localhost:8081/api/employee/getall', {
             headers: {
@@ -90,13 +95,15 @@ function HREmployee() {
                 headers: {
                     'Authorization': 'Basic ' + localStorage.getItem('token')
                 }
-            }).then(resp => {
+            })
+            .then(resp => {
                 setMsg('Employee Updated Successfully.');
                 const updatedEmployees = employees.map(emp => emp.id === selectedEmployeeId ? resp.data : emp);
                 setEmployees(updatedEmployees);
                 resetForm();
                 setVisible(false);
-            }).catch(err => {
+            })
+            .catch(err => {
                 console.error('Error during employee update:', err.response || err);
                 setMsg('Employee Update Failed.. please contact IT Admin');
             });
@@ -105,12 +112,14 @@ function HREmployee() {
                 headers: {
                     'Authorization': 'Basic ' + localStorage.getItem('token')
                 }
-            }).then(resp => {
+            })
+            .then(resp => {
                 setMsg('Employee Onboarded Successfully.');
                 setEmployees([...employees, resp.data]);
                 resetForm();
                 setVisible(false);
-            }).catch(err => {
+            })
+            .catch(err => {
                 console.error('Error during employee onboarding:', err.response || err);
                 setMsg('Employee Onboarding Failed.. please contact IT Admin');
             });
@@ -154,14 +163,42 @@ function HREmployee() {
             headers: {
                 'Authorization': 'Basic ' + localStorage.getItem('token')
             }
-        }).then(resp => {
+        })
+        .then(resp => {
             setMsg('Employee Deleted Successfully.');
             setEmployees(employees.filter(emp => emp.id !== employeeToDelete.id));
             setDeleteDialogVisible(false);
             setEmployeeToDelete(null);
-        }).catch(err => {
+        })
+        .catch(err => {
             console.error('Error during employee deletion:', err.response || err);
             setMsg('Employee Deletion Failed.. please contact IT Admin');
+        });
+    };
+
+    const assignTask = () => {
+        if (!selectedEmployee) return;
+
+        let empId = selectedEmployee.id;
+        let data = {
+            'taskDetails': messageContent
+        };
+
+        axios.post(`http://localhost:8081/api/task/employee/${empId}`, data, {
+            headers: {
+                'Authorization': 'Basic ' + localStorage.getItem('token')
+            }
+        })
+        .then(resp => {
+            setMsg(`Task assigned to ${selectedEmployee.name} successfully.`);
+            toast.current.show({ severity: 'success', summary: 'Success', detail: `Message sent to ${selectedEmployee.name}`, life: 3000 });
+            setMessageContent('');
+            setIsMessageDialogVisible(false);
+        })
+        .catch(err => {
+            console.error('Error during task assignment:', err.response || err);
+            setMsg('Operation Failed, please contact Admin');
+            toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to send message.', life: 3000 });
         });
     };
 
@@ -170,11 +207,7 @@ function HREmployee() {
         ...managers.map(manager => ({ ...manager, type: 'Manager' }))
     ];
 
-    const header = (
-        <div className="table-header">
-            List of Employees and Managers
-        </div>
-    );
+    const header = <div className="table-header">List of Employees and Managers</div>;
 
     const cityRowFilter = (
         <input
@@ -189,6 +222,7 @@ function HREmployee() {
         />
     );
 
+    // handling the delete, update, send
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -206,6 +240,16 @@ function HREmployee() {
                     tooltip="Delete"
                     tooltipOptions={{ position: 'top' }}
                 />
+                <Button 
+                    icon="pi pi-send" 
+                    className="background" 
+                    onClick={() => {
+                        setSelectedEmployee(rowData);
+                        setIsMessageDialogVisible(true);
+                    }} 
+                    tooltip="Send"
+                    tooltipOptions={{ position: 'top' }}
+                />
             </React.Fragment>
         );
     };
@@ -213,6 +257,7 @@ function HREmployee() {
     return (
         <>
             <Navbar />
+            <Toast ref={toast} />
             {msg && <div className="alert alert-success">{msg}</div>}
             <div className="">
                 <Button 
@@ -223,7 +268,7 @@ function HREmployee() {
                         resetForm();
                         setVisible(true);
                     }}
-                    className='addEmployee-btn ml-0'
+                    className='addBtn-btn ml-0'
                 />
                 <Dialog header={isEdit ? "Edit Employee" : "Add Employee"} visible={visible} style={{ width: '50vw' }} onHide={() => {
                     resetForm();
@@ -287,7 +332,7 @@ function HREmployee() {
                                 onChange={(e) => setPassword(e.target.value)} />
                         </div>
                         <div className="card-footer">
-                            <Button label={isEdit ? "Update" : "Add"} icon="pi pi-check"className="addbtn btn-danger" onClick={handleFormSubmit} />
+                            <Button label={isEdit ? "Update" : "Add"} icon="pi pi-check" className="addbtn btn-danger" onClick={handleFormSubmit} />
                             <Button label="Cancel" icon="pi pi-times" size='small' onClick={() => {
                                 resetForm();
                                 setVisible(false);
@@ -305,8 +350,28 @@ function HREmployee() {
                         <Button label="Yes" icon="pi pi-check" style={{ color: 'green' }} className="p-button-text" onClick={deleteEmployee} />
                     </div>
                 </Dialog>
+                <Dialog header="Send Message" visible={isMessageDialogVisible} style={{ width: '50vw' }} onHide={() => setIsMessageDialogVisible(false)}>
+                    <div className="p-fluid">
+                        <div className="p-field">
+                            <label htmlFor="messageContent">Message Content</label>
+                            <InputTextarea
+                                id="messageContent"
+                                value={messageContent}
+                                onChange={(e) => setMessageContent(e.target.value)}
+                                rows={5}
+                                cols={88}
+                            />
+                        </div>
+                        <div className="p-field">
+                            <label htmlFor="employeeName">To: {selectedEmployee?.name}</label>
+                        </div>
+                        <div className="p-dialog-footer">
+                            <Button label="Send" icon="pi pi-check" onClick={assignTask} />
+                            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={() => setIsMessageDialogVisible(false)} />
+                        </div>
+                    </div>
+                </Dialog>
             </div>
-
             <div className="card">
                 <DataTable
                     value={combinedData}

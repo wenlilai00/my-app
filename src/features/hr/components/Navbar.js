@@ -30,15 +30,16 @@ function NavBar({searchFn}) {
   return (
     <Navbar expand="lg" className="nav-box">
       <Container>
-        <Navbar.Brand href="/">Capstone Project</Navbar.Brand>
+        <Navbar.Brand href="/hr">Capstone Project</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse className="dropdown-btn" id="basic-navbar-nav">
           <Nav className="navbar-container">
             <Nav.Link><Link to={"/hr"}>Dashboard</Link></Nav.Link>
-            <Nav.Link><Link to={"/employee"}>Employee</Link></Nav.Link>
-            <Nav.Link><Link to={"/leave"}>Leave</Link></Nav.Link>
+            <Nav.Link><Link to={"/hremployee"}>Employee</Link></Nav.Link>
+            <Nav.Link><Link to={"/projects"}>Projects</Link></Nav.Link>
+            {/* <Nav.Link><Link to={"/hr-send-payslip"}>Message</Link></Nav.Link> */}
 
-            <Form className="d-flex">
+            {/* <Form className="d-flex">
              <IconField iconPosition="left">
                 <InputIcon className="pi pi-search" />
                 <InputText 
@@ -51,25 +52,26 @@ function NavBar({searchFn}) {
                 />
               </IconField>
     
-          </Form>
+          </Form> */}
 
-          <NavDropdown 
+          <NavDropdown className="nav-right"
             title={
               <Avatar 
                 icon="pi pi-user" 
-                className="logout-btn mr-2" 
+                className="logout-btn" 
                 size="mdium"
                 shape="circle" 
+                marginRight="20px"
               />
             } 
             id="basic-nav-dropdown"
             alignRight
           >
-              <NavDropdown.Item>
+              <NavDropdown.Item className="dropdown-btn">
               <span>{localStorage.getItem('username')} &nbsp;&nbsp;&nbsp;</span>
               </NavDropdown.Item>
               &nbsp;&nbsp;
-              <NavDropdown.Item icon="pi-sign-out" onClick={logout}>
+              <NavDropdown.Item className="dropdown-btn" icon="pi-sign-out" onClick={logout}>
                 Sign Out
               </NavDropdown.Item>
             </NavDropdown>

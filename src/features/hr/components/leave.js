@@ -1,58 +1,102 @@
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
+import React, { useState, useRef } from 'react';
+import axios from 'axios';
+import { Toast } from 'primereact/toast';
 
-// const AssignProjectForm = () => {
-//   const [managerId, setManagerId] = useState('');
-//   const [employeeIds, setEmployeeIds] = useState([]);
-//   const [projectId, setProjectId] = useState('');
-//   const [managers, setManagers] = useState([]);
-//   const [employees, setEmployees] = useState([]);
-//   const [projects, setProjects] = useState([]);
+function SendPayslip() {
+    const [employeeId, setEmployeeId] = useState('');
+    const [payslipData, setPayslipData] = useState({
+        month: '',
+        year: '',
+        grossSalary: '',
+        netSalary: '',
+        deductions: '',
+        otherDetails: ''
+    });
+    const toast = useRef(null);
 
-//   useEffect(() => {
-//     axios.get('http://localhost:8081/api/managers').then(response => setManagers(response.data));
-//     axios.get('http://localhost:8081/api/employees').then(response => setEmployees(response.data));
-//     axios.get('http://localhost:8081/api/projects').then(response => setProjects(response.data));
-//   }, []);
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setPayslipData({ ...payslipData, [name]: value });
+    };
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     const data = {
-//       managerId: parseInt(managerId),
-//       employeeIds: employeeIds.map(id => parseInt(id)),
-//       projectId: parseInt(projectId)
-//     };
-//     axios.post(`http://localhost:8081/api/hr/project/assign/${managerId}/${projectId}`, employeeIds)
-//       .then(response => {
-//         console.log('Project assigned:', response.data);
-//       })
-//       .catch(error => {
-//         console.error('Error assigning project:', error.response ? error.response.data : error.message);
-//       });
-//   };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axios.post('/api/payslip/send', { employeeId, payslipData })
+            .then(response => {
+                toast.current.show({ severity: 'success', summary: 'Success', detail: 'Payslip sent successfully.', life: 3000 });
+            })
+            .catch(error => {
+                toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to send payslip.', life: 3000 });
+            });
+    };
 
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <select value={managerId} onChange={e => setManagerId(e.target.value)} required>
-//         <option value="">Select Manager</option>
-//         {managers.map(manager => (
-//           <option key={manager.id} value={manager.id}>{manager.name}</option>
-//         ))}
-//       </select>
-//       <select multiple value={employeeIds} onChange={e => setEmployeeIds([...e.target.selectedOptions].map(o => o.value))} required>
-//         {employees.map(employee => (
-//           <option key={employee.id} value={employee.id}>{employee.name}</option>
-//         ))}
-//       </select>
-//       <select value={projectId} onChange={e => setProjectId(e.target.value)} required>
-//         <option value="">Select Project</option>
-//         {projects.map(project => (
-//           <option key={project.id} value={project.id}>{project.title}</option>
-//         ))}
-//       </select>
-//       <button type="submit">Assign Project</button>
-//     </form>
-//   );
-// };
+    return (
+        <div>
+            <Toast ref={toast} />
+            <h2>Send Payslip</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label>Employee ID:</label>
+                    <input
+                        type="text"
+                        name="employeeId"
+                        value={employeeId}
+                        onChange={(e) => setEmployeeId(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Month:</label>
+                    <input
+                        type="text"
+                        name="month"
+                        value={payslipData.month}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Year:</label>
+                    <input
+                        type="text"
+                        name="year"
+                        value={payslipData.year}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Gross Salary:</label>
+                    <input
+                        type="number"
+                        name="grossSalary"
+                        value={payslipData.grossSalary}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Net Salary:</label>
+                    <input
+                        type="number"
+                        name="netSalary"
+                        value={payslipData.netSalary}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Other Details:</label>
+                    <textarea
+                        name="otherDetails"
+                        value={payslipData.otherDetails}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                <button type="submit" className="btn btn-primary">Send Payslip</button>
+            </form>
+        </div>
+    );
+}
 
-// export default AssignProjectForm;
+export default SendPayslip;

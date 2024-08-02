@@ -1,8 +1,8 @@
 a {
     text-decoration: none;
-    color: black;
+    color:white;
     margin-right: 10px;
-    font-size: 15px;
+    font-size: 17px;
 }
 
 a > :hover {
@@ -10,7 +10,7 @@ a > :hover {
 }
 
 .nav-box {
-    background-color: #2634ec;
+    background-color: #394dfc;
 }
 
 .navbar-container {
@@ -30,30 +30,28 @@ a > :hover {
 
 .navbar-brand {
 margin-left: auto;
+color: white;
+font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+font-size: 30px;
 }
 
 .logout-btn {
     color: black;
-    margin-left: 100px !important;
+    margin-left: 120px;
     border: none;
 }
 
-.dropdown-btn {
-    margin-left: 20px !important;
-    padding-left: 0px;
-    width: 0vh;
-}
-
 .nav-link:hover {
-    color: yellow !important;
-    padding: 0px;
-    transition: none;
-    border-radius: 5px;
-    position: relative;
-    transition: color 0.3s;
+        color: yellow;
+        padding: 0px;
+        transition: none;
+        border-radius: 5px;
+        position: relative;
+        transition: color 0.3s;
 }
 
-.nav-right {
-    margin-left:180px !important;
+.nav-link {
+    color:white;
 }
+
 

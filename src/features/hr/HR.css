@@ -3,8 +3,11 @@
 }
 
 .container-container h1{
-    margin-left: -80%;
-    margin-bottom: 5%;
+    margin-top: 30px;
+    display: flex;
+    justify-items: left;
+    margin-left: 30px;
+    margin-bottom: 40px;
 }
 
 .chart-container {
@@ -63,7 +66,7 @@
     color: inherit !important;
 }
 
-.addEmployee-btn {
+.addBtn-btn {
     width: 30vh;
     margin-left: 78%;
     margin-top: 30px;
@@ -76,8 +79,8 @@
 
 .addbtn {
     background-color: green;
-    margin-left: 58%;
-    margin-right: 18px;
+    margin-left: 55%;
+    margin-right: 10px;
     border-radius: 5px;
     border: none;
     padding-right: 17px !important;
@@ -85,3 +88,7 @@
     padding: 7px;
 }
 
+.custom-left {
+    justify-content: flex-start !important;
+    margin-left: 0px;
+}
